@@ -16,11 +16,11 @@ return new class extends Migration
             $table->string('name');
             $table->string('email');
             $table->string('password');
-            $table->enum('role', ['patient', 'doctor', 'admin', 'receptionist']);
+            $table->enum('role', ['patient', 'doctor', 'admin','receptionist']);
             $table->timestamps();
         });
     }
-
+    
 
 
     /**

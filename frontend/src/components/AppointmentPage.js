@@ -32,12 +32,12 @@ const AppointmentPage = () => {
         try {
             const response1 = await axios.get(`http://127.0.0.1:8000/api/patients/${user.id}`);
             const response = await axios.get(`http://127.0.0.1:8000/api/patients/${response1.data.patient.id}/appointments`);
-
+            
             const appointmentsData = response.data.appointments || [];
             const formattedAppointments = appointmentsData.map(appointment => {
                 const [date, time] = appointment.appointment_date.split(' ');
                 const formattedTime = convertTo12HourFormat(time);
-                return { ...appointment, date, time: formattedTime };
+                return { ...appointment, date, time: formattedTime  };
             });
             setAppointments(formattedAppointments || []);
         } catch (error) {
@@ -89,7 +89,7 @@ const AppointmentPage = () => {
                 appointment_date: `${rescheduleFormData.date} ${convertTo24Hour(rescheduleFormData.time)}`
             });
             // Update the appointment in the local state
-            setAppointments(appointments.map(appointment =>
+            setAppointments(appointments.map(appointment => 
                 appointment.id === selectedAppointment.id ? response.data.appointment : appointment
             ));
             setShowRescheduleModal(false);
@@ -140,7 +140,7 @@ const AppointmentPage = () => {
     };
 
     const convertTo24Hour = (time12h) => {
-
+        
         const [time, modifier] = time12h.split(' ');
         let [hours, minutes] = time.split(':');
         if (hours === '12') {
@@ -205,7 +205,7 @@ const AppointmentPage = () => {
                                                 >
                                                     Cancel
                                                 </button>
-
+                                                
                                             </>
                                         )}
                                         {appointment.status == 'pending' && (
@@ -240,22 +240,22 @@ const AppointmentPage = () => {
                                 <div className="modal-body">
                                     <div className="mb-3">
                                         <label htmlFor="date" className="form-label">Date</label>
-                                        <input
-                                            type="date"
-                                            className="form-control"
-                                            id="date"
-                                            value={rescheduleFormData.date}
-                                            onChange={(e) => setRescheduleFormData({ ...rescheduleFormData, date: e.target.value })}
-                                            required
+                                        <input 
+                                            type="date" 
+                                            className="form-control" 
+                                            id="date" 
+                                            value={rescheduleFormData.date} 
+                                            onChange={(e) => setRescheduleFormData({ ...rescheduleFormData, date: e.target.value })} 
+                                            required 
                                         />
                                     </div>
                                     <div className="mb-3">
                                         <label htmlFor="time" className="form-label">Time</label>
-                                        <select
-                                            className="form-control"
-                                            id="time"
-                                            value={rescheduleFormData.time}
-                                            onChange={(e) => setRescheduleFormData({ ...rescheduleFormData, time: e.target.value })}
+                                        <select 
+                                            className="form-control" 
+                                            id="time" 
+                                            value={rescheduleFormData.time} 
+                                            onChange={(e) => setRescheduleFormData({ ...rescheduleFormData, time: e.target.value })} 
                                             required
                                         >
                                             {generateTimeOptions().map(time => (
@@ -274,82 +274,83 @@ const AppointmentPage = () => {
                 </div>
             )}
             {/* Modal for booking appointment */}
-            <div className={`modal ${showModal ? 'show' : ''}`} style={{ display: showModal ? 'block' : "" }}>
-                <div className="modal-dialog modal-dialog-centered">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title">Book Appointment</h5>
-                            <button type="button" className="btn btn-danger btn-close" onClick={handleModalClose}>&times;</button>
-                        </div>
-                        <form onSubmit={handleFormSubmit}>
-                            <div className="modal-body">
-                                <div className="mb-3">
-                                    <label htmlFor="date" className="form-label">Date</label>
-                                    <input
-                                        type="date"
-                                        className="form-control"
-                                        id="date"
-                                        value={formData.date}
-                                        onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                                        required
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="time" className="form-label">Time</label>
-                                    <select
-                                        className="form-control"
-                                        id="time"
-                                        value={formData.time}
-                                        onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                                        required
-                                    >
-                                        {generateTimeOptions().map(time => (
-                                            <option key={time} value={time}>{time}</option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className="mb-3">
-                                    <label htmlFor="doctorId" className="form-label">Doctor</label>
-                                    <select
-                                        className="form-control"
-                                        id="doctorId"
-                                        value={formData.doctorId}
-                                        onChange={(e) => setFormData({ ...formData, doctorId: e.target.value })}
-                                        required
-                                        style={{ color: 'black' }} // Set text color to black for all options
-                                    >
-                                        <option value="" disabled>Select a doctor</option>
-                                        {doctors.map(doctor => (
-                                            <option key={doctor.doctor_id} value={doctor.doctor_id}>
-                                                {doctor.first_name + " " + doctor.last_name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-
-
-
-                                <div className="mb-3">
-                                    <label htmlFor="reason" className="form-label">Reason</label>
-                                    <textarea
-                                        className="form-control"
-                                        id="reason"
-                                        value={formData.reason}
-                                        onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
-                                        required
-                                    ></textarea>
-                                </div>
-                            </div>
-                            <div className="modal-footer">
-                                <button type="button" className="btn btn-secondary" onClick={handleModalClose}>Close</button>
-                                <button type="submit" className="btn btn-primary">Book Appointment</button>
-                            </div>
-                        </form>
-                    </div>
+            <div className={`modal ${showModal ? 'show' : ''}`} style={{ display: showModal ? 'block' : ""}}>
+            <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+                <div className="modal-header">
+                    <h5 className="modal-title">Book Appointment</h5>
+                    <button type="button" className="btn btn-danger btn-close" onClick={handleModalClose}>&times;</button>
                 </div>
+                <form onSubmit={handleFormSubmit}>
+                    <div className="modal-body">
+                        <div className="mb-3">
+                            <label htmlFor="date" className="form-label">Date</label>
+                            <input
+                                type="date"
+                                className="form-control"
+                                id="date"
+                                value={formData.date}
+                                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                                required
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="time" className="form-label">Time</label>
+                            <select
+                                className="form-control"
+                                id="time"
+                                value={formData.time}
+                                onChange={(e) => setFormData({ ...formData, time: e.target.value })}
+                                required
+                            >
+                                {generateTimeOptions().map(time => (
+                                    <option key={time} value={time}>{time}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="doctorId" className="form-label">Doctor</label>
+                            <select
+                                className="form-control"
+                                id="doctorId"
+                                value={formData.doctorId}
+                                onChange={(e) => setFormData({ ...formData, doctorId: e.target.value })}
+                                required
+                                style={{ color: 'black' }} // Set text color to black for all options
+                            >
+                                <option value="" disabled>Select a doctor</option>
+                                {doctors.map(doctor => (
+                                    <option key={doctor.doctor_id} value={doctor.doctor_id}>
+                                        {doctor.first_name + " " + doctor.last_name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+
+
+                        <div className="mb-3">
+                            <label htmlFor="reason" className="form-label">Reason</label>
+                            <textarea
+                                className="form-control"
+                                id="reason"
+                                value={formData.reason}
+                                onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
+                                required
+                            ></textarea>
+                        </div>
+                    </div>
+                    <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" onClick={handleModalClose}>Close</button>
+                        <button type="submit" className="btn btn-primary">Book Appointment</button>
+                    </div>
+                </form>
             </div>
         </div>
-    );
+    </div>
+</div>
+);
 };
-
-export default AppointmentPage;
+        
+        export default AppointmentPage;
+        
